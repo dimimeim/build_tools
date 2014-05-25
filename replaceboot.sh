@@ -12,7 +12,7 @@ while [ $continue -eq "0" ]; do
 done
 
 cd boots_f2fs
-zip -r "../out/device/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" "boot_s2vep.img"
+zip -r "../out/device/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" "boot_$device.img"
 zip -d "../out/device/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" boot.img
 printf "@ boot_$device.img\n@=boot.img\n" | zipnote -w "../out/device/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip"
 md5sum "../out/device/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" > "../out/device/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip.md5sum"
