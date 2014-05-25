@@ -4,6 +4,9 @@ repo forall -c 'git reset --hard ; git clean -fdx'
 # Fix MediaProvider issues
 sed -i 's/<project path="packages\/providers\/MediaProvider" name="packages_providers_MediaProvider" remote="sr" revision="kk4.4"  \/>/<project path="packages\/providers\/MediaProvider" name="luk1337\/android_packages_providers_MediaProvider" remote="gh" revision="master"  \/>/g' .repo/manifests/default.xml
 
+# Sync repositories
+repo sync -f
+
 # Remove f2fs files from s2vep
 sed -i '	\/device\/samsung\/s2vep\/ramdisk\/sbin\/automount:root\/sbin\/automount / d' device/samsung/s2vep/device_s2vep.mk
 sed -i '	\/device\/samsung\/s2vep\/ramdisk\/sbin\/busybox:root\/sbin\/busybox / d' device/samsung/s2vep/device_s2vep.mk
@@ -35,5 +38,3 @@ sed -i '    exec \/sbin\/automount/ d' device/samsung/s2ve/ramdisk/init.capri_ss
 # Remove f2fs files
 rm -rf device/samsung/s2vep/ramdisk/sbin
 rm -rf device/samsung/s2ve/ramdisk/sbin
-
-repo sync -f
