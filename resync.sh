@@ -10,4 +10,7 @@ sed -i '	\/device\/samsung\/s2ve\/ramdisk\/sbin\/automount:root\/sbin\/automount
 sed -i '	\/device\/samsung\/s2ve\/ramdisk\/sbin\/busybox:root\/sbin\/busybox / d' device/samsung/s2ve/device_s2ve.mk
 sed -i '	\/device\/samsung\/s2ve\/ramdisk\/sbin\/sh:root\/sbin\/sh / d' device/samsung/s2ve/device_s2ve.mk
 
+rm -rf device/samsung/s2vep/ramdisk/sbin
+rm -rf device/samsung/s2ve/ramdisk/sbin
+
 repo sync -f
