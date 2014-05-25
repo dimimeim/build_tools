@@ -18,7 +18,7 @@ printf "@ boot_$device.img\n@=boot.img\n" | zipnote -w "../out/target/product/$d
 
 unzip "../out/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" "META-INF/*"
 sed -i 's/mount("ext4", "EMMC", "\/dev\/block\/mmcblk0p19", "\/system");/run_program("\/sbin\/mount", "-t", "auto", "\/dev\/block\/mmcblk0p19", "\/system");/g' META-INF/com/google/android/updater-script
-sed -i '/format("ext4", "EMMC", "\/dev\/block\/mmcblk0p19", "0", "\/system"); / d' META-INF/com/google/android/updater-script
+sed -i '/format("ext4", "EMMC", "\/dev\/block\/mmcblk0p19", "0", "\/system");/ d' META-INF/com/google/android/updater-script
 zip -r "../out/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" META-INF
 
 md5sum "../out/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip" > "../out/target/product/$device/LS-KK-v3.1-$(date +%Y-%m-%d)-$device.zip.md5sum"
