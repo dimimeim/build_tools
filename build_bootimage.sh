@@ -12,6 +12,6 @@ while [ $continue -eq "0" ]; do
 done
 
 . build/envsetup.sh
-add_lunch_combo "liquid_$device-userdebug"
-lunch "liquid_$device-userdebug"
+add_lunch_combo "cm_$device-userdebug"
+lunch "cm_$device-userdebug"
 time mka bootimage | tee build.log
