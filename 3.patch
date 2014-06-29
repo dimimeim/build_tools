@@ -15,20 +15,14 @@ diff --git a/services/audioflinger/AudioMixer.cpp frameworks/av/services/audiofl
 index 95f7381..5f80165 100644
 --- AudioMixer_old.cpp	2014-03-11 15:32:12.571292800 +0100
 +++ frameworks/av/services/audioflinger/AudioMixer.cpp	2014-03-11 15:33:47.000000000 +0100
-@@ -1266,7 +1266,13 @@
-                     t.in = t.buffer.raw;
+@@ -1164,6 +1164,7 @@
                      // t.in == NULL can happen if the track was flushed just after having
                      // been enabled for mixing.
--                    if (t.in == NULL) break;
-+                    if (t.in == NULL) {
-+						// We need to clear buffer here or there will be strange artifact
-+						// on I9082's speaker
-+						memset(t.mainBuffer, 0, sizeof(int16_t) * MAX_NUM_CHANNELS * state->frameCount);
-+					}
- 
-                     if (CC_UNLIKELY(aux != NULL)) {
-                         aux += outFrames;
-
+                    if (t.in == NULL) {
++                        memset(t.mainBuffer, 0, sizeof(int16_t) * MAX_NUM_CHANNELS * state->frameCount);
+                         enabledTracks &= ~(1<<i);
+                         e1 &= ~(1<<i);
+                         break;
 -- 
 1.8.3.4 (Apple Git-47)
 
