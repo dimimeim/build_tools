@@ -1,4 +1,5 @@
 export USE_CCACHE=1
+prebuilts/misc/linux-x86/ccache/ccache -M 50G
 continue=0
 
 while [ $continue -eq "0" ]; do
@@ -12,7 +13,4 @@ while [ $continue -eq "0" ]; do
 done
 
 . build/envsetup.sh
-add_lunch_combo "liquid_$device-userdebug"
-lunch "liquid_$device-userdebug"
-make dirty
-time mka liquid | tee build.log
+brunch "$device"
