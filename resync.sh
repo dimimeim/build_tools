@@ -1,4 +1,4 @@
-repo init -u https://github.com/Cyanogenmod/android.git
+repo init -u https://github.com/AOSB/android.git
 repo forall -c 'git reset --hard ; git clean -fdx'
 
 # Sync repositories
