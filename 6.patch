@@ -1,38 +1,21 @@
---- frameworks/base/data/keyboards/Generic_bak.kl	2014-06-12 15:22:07.380022800 +0200
-+++ frameworks/base/data/keyboards/Generic.kl	2014-06-12 15:26:21.000000000 +0200
-@@ -121,7 +121,7 @@
- key 99    SYSRQ
- key 100   ALT_RIGHT
- # key 101 "KEY_LINEFEED"
--key 102   MOVE_HOME
-+key 102   MOVE_HOME VIRTUAL
- key 103   DPAD_UP
- key 104   PAGE_UP
- key 105   DPAD_LEFT
-@@ -158,7 +158,7 @@
- # key 136 "KEY_FIND"
- # key 137 "KEY_CUT"
- # key 138 "KEY_HELP"
--key 139   MENU              WAKE_DROPPED
-+key 139   MENU              VIRTUAL
- key 140   CALCULATOR
- # key 141 "KEY_SETUP"
- key 142   POWER             WAKE
-@@ -177,7 +177,7 @@
- key 155   ENVELOPE
- key 156   BOOKMARK
- # key 157 "KEY_COMPUTER"
--key 158   BACK              WAKE_DROPPED
-+key 158   BACK              VIRTUAL
- key 159   FORWARD
- key 160   MEDIA_CLOSE
- key 161   MEDIA_EJECT
-@@ -236,7 +236,7 @@
- # key 214 "KEY_QUESTION"
- key 215   ENVELOPE
- # key 216 "KEY_CHAT"
--key 217   SEARCH
-+key 217   SEARCH  VIRTUAL
- # key 218 "KEY_CONNECT"
- # key 219 "KEY_FINANCE"
- # key 220 "KEY_SPORT"
+commit 21b8149caaa10f07db840c969c51d3e657c3d317
+Author: luk <priv.luk@gmail.com>
+Date:   Fri Jul 4 20:02:23 2014 +0200
+
+    PROVIDERS MEDIA MEDIAPROVIDER PATCH for s2ve/s2vep device
+
+    Change-Id: I402725aee5e48b69dadfe28ca9e744e3a6ee6faf
+
+diff --git a/src/com/android/providers/media/MediaProvider.java b/src/com/android/providers/media/MediaProvider.java
+index 775d6c8..b5665c9 100755
+--- a/src/com/android/providers/media/MediaProvider.java
++++ packages/providers/MediaProvider/src/com/android/providers/media/MediaProvider.java
+@@ -4972,7 +4972,7 @@ public class MediaProvider extends ContentProvider {
+             // request a reasonably sized output image
+             final Resources r = getContext().getResources();
+             final int maximumThumbSize = r.getDimensionPixelSize(R.dimen.maximum_thumb_size);
+-            while (opts.outHeight > maximumThumbSize || opts.outWidth > maximumThumbSize) {
++            while (opts.outHeight > 1024 || opts.outWidth > 1024) {
+                 opts.outHeight /= 2;
+                 opts.outWidth /= 2;
+                 opts.inSampleSize *= 2;
