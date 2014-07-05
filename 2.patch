@@ -44,58 +44,6 @@ index 38e019c..26e54f1 100644
 1.8.3.4 (Apple Git-47)
 
 
-From 3018d04dcdb261b174b7a22787c32c3e3e91f52c Mon Sep 17 00:00:00 2001
-From: Pawit Pornkitprasan <p.pawit@gmail.com>
-Date: Tue, 10 Dec 2013 19:37:23 +0700
-Subject: [PATCH 2/4] SurfaceFlinger: ifdef EVENT_ORIENTATION
-
-Some HWC implementation spam the log on unknown event
-
-Change-Id: I3cdbd51f8badc195a14ff2b979d78c363e525207
----
- services/surfaceflinger/SurfaceFlinger.cpp | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/services/surfaceflinger/SurfaceFlinger.cpp frameworks/native/services/surfaceflinger/SurfaceFlinger.cpp
-index 822130b..8583393 100644
---- a/services/surfaceflinger/SurfaceFlinger.cpp
-+++ frameworks/native/services/surfaceflinger/SurfaceFlinger.cpp
-@@ -1103,6 +1103,7 @@ void SurfaceFlinger::setUpHWComposer() {
-             sp<const DisplayDevice> hw(mDisplays[dpy]);
-             const int32_t id = hw->getHwcDisplayId();
-             if (id >= 0) {
-+#ifdef QCOM_HARDWARE
-                 // Get the layers in the current drawying state
-                 const LayerVector& layers(mDrawingState.layersSortedByZ);
-                 bool freezeSurfacePresent = false;
-@@ -1122,6 +1123,7 @@ void SurfaceFlinger::setUpHWComposer() {
-                         }
-                     }
-                 }
-+#endif
- 
-                 const Vector< sp<Layer> >& currentLayers(
-                     hw->getVisibleLayersSortedByZ());
-@@ -1135,6 +1137,7 @@ void SurfaceFlinger::setUpHWComposer() {
-                      */
-                     const sp<Layer>& layer(currentLayers[i]);
-                     layer->setPerFrameData(hw, *cur);
-+#ifdef QCOM_HARDWARE
-                     if(freezeSurfacePresent) {
-                         // if freezeSurfacePresent, set ANIMATING flag
-                         cur->setAnimating(true);
-@@ -1155,6 +1158,7 @@ void SurfaceFlinger::setUpHWComposer() {
-                             }
-                         }
-                     }
-+#endif
-                 }
-             }
-         }
--- 
-1.8.3.4 (Apple Git-47)
-
-
 From 8a097001d151587a4d4e5205fe92b88d905281fe Mon Sep 17 00:00:00 2001
 From: Pawit Pornkitprasan <p.pawit@gmail.com>
 Date: Tue, 10 Dec 2013 19:38:42 +0700

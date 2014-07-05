@@ -1,93 +1,38 @@
-From cabf0d36d236cb9965425fb03e9ac949ae564f92 Mon Sep 17 00:00:00 2001
-From: "dimimeim@gmail.com" <dimimeim@gmail.com>
-Date: Mon, 10 Mar 2014 22:45:17 +0200
-Subject: [PATCH] leds patch
-
----
-diff --git a/services/java/com/android/server/input/InputManagerService.java b/services/java/com/android/server/input/InputManagerService.java
-index d2d312c..d31abd8 100644
---- a/services/java/com/android/server/input/InputManagerService.java
-+++ frameworks/base/services/java/com/android/server/input/InputManagerService.java
-@@ -90,6 +90,8 @@
- import libcore.io.Streams;
- import libcore.util.Objects;
- 
-+import com.android.server.power.PowerManagerService;
-+
- /*
-  * Wraps the C++ InputManager and provides its callbacks.
-  */
-@@ -1421,6 +1423,9 @@ final boolean filterInputEvent(InputEvent event, int policyFlags) {
- 
-     // Native callback.
-     private int interceptKeyBeforeQueueing(KeyEvent event, int policyFlags, boolean isScreenOn) {
-+	if ((event.getScanCode() == 139 || event.getScanCode() == 158) && event.getAction() == 0) {
-+		PowerManagerService.ButtonsLightON();
-+	}
-         return mWindowManagerCallbacks.interceptKeyBeforeQueueing(
-                 event, policyFlags, isScreenOn);
-     }
-diff --git a/services/java/com/android/server/power/PowerManagerService.java b/services/java/com/android/server/power/PowerManagerService.java
-index c1a9849..e578b22 100644
---- a/services/java/com/android/server/power/PowerManagerService.java
-+++ frameworks/base/services/java/com/android/server/power/PowerManagerService.java
-@@ -77,6 +77,8 @@
- public final class PowerManagerService extends IPowerManager.Stub
-         implements Watchdog.Monitor {
-     private static final String TAG = "PowerManagerService";
-+    private static long buttonNextTimeout = -1;
-+    private static int buttonBrightness = 0;
- 
-     private static final boolean DEBUG = false;
-     private static final boolean DEBUG_SPEW = DEBUG && true;
-@@ -189,13 +191,13 @@
-     private DreamManagerService mDreamManager;
-     private AutoBrightnessHandler mAutoBrightnessHandler;
-     private LightsService.Light mAttentionLight;
--    private LightsService.Light mButtonsLight;
-+    private static LightsService.Light mButtonsLight;
-     private LightsService.Light mKeyboardLight;
-     private LightsService.Light mCapsLight;
-     private LightsService.Light mFnLight;
- 
--    private int mButtonTimeout;
--    private int mButtonBrightness;
-+    private static int mButtonTimeout;
-+    private static int mButtonBrightness;
-     private int mButtonBrightnessSettingDefault;
-     private int mKeyboardBrightness;
-     private int mKeyboardBrightnessSettingDefault;
-@@ -1561,7 +1563,7 @@ private void updateUserActivitySummaryLocked(long now, int dirty) {
-                     nextTimeout = mLastUserActivityTime
-                             + screenOffTimeout - screenDimDuration;
-                     if (now < nextTimeout) {
--                        int buttonBrightness, keyboardBrightness;
-+                        int keyboardBrightness;
-                         if (mButtonBrightnessOverrideFromWindowManager >= 0) {
-                             buttonBrightness = mButtonBrightnessOverrideFromWindowManager;
-                             keyboardBrightness = mButtonBrightnessOverrideFromWindowManager;
-@@ -1574,7 +1576,7 @@ private void updateUserActivitySummaryLocked(long now, int dirty) {
-                         if (mButtonTimeout != 0 && now > mLastUserActivityTime + mButtonTimeout) {
-                             mButtonsLight.setBrightness(0);
-                         } else {
--                            mButtonsLight.setBrightness(buttonBrightness);
-+			    if (now > buttonNextTimeout) mButtonsLight.setBrightness(0);
-                             if (buttonBrightness != 0 && mButtonTimeout != 0) {
-                                 nextTimeout = now + mButtonTimeout;
-                             }
-@@ -1617,7 +1619,11 @@ private void updateUserActivitySummaryLocked(long now, int dirty) {
-             }
-         }
-     }
--
-+    static public void ButtonsLightON(){
-+        long timing = SystemClock.uptimeMillis();
-+	mButtonsLight.setBrightness(buttonBrightness);
-+	buttonNextTimeout = timing + mButtonTimeout;
-+    }
-     /**
-      * Called when a user activity timeout has occurred.
-      * Simply indicates that something about user activity has changed so that the new
--- 
-1.8.5.5
-
+--- frameworks/base/data/keyboards/Generic_bak.kl	2014-06-12 15:22:07.380022800 +0200
++++ frameworks/base/data/keyboards/Generic.kl	2014-06-12 15:26:21.000000000 +0200
+@@ -121,7 +121,7 @@
+ key 99    SYSRQ
+ key 100   ALT_RIGHT
+ # key 101 "KEY_LINEFEED"
+-key 102   MOVE_HOME
++key 102   MOVE_HOME VIRTUAL
+ key 103   DPAD_UP
+ key 104   PAGE_UP
+ key 105   DPAD_LEFT
+@@ -158,7 +158,7 @@
+ # key 136 "KEY_FIND"
+ # key 137 "KEY_CUT"
+ # key 138 "KEY_HELP"
+-key 139   MENU              WAKE_DROPPED
++key 139   MENU              VIRTUAL
+ key 140   CALCULATOR
+ # key 141 "KEY_SETUP"
+ key 142   POWER             WAKE
+@@ -177,7 +177,7 @@
+ key 155   ENVELOPE
+ key 156   BOOKMARK
+ # key 157 "KEY_COMPUTER"
+-key 158   BACK              WAKE_DROPPED
++key 158   BACK              VIRTUAL
+ key 159   FORWARD
+ key 160   MEDIA_CLOSE
+ key 161   MEDIA_EJECT
+@@ -236,7 +236,7 @@
+ # key 214 "KEY_QUESTION"
+ key 215   ENVELOPE
+ # key 216 "KEY_CHAT"
+-key 217   SEARCH
++key 217   SEARCH  VIRTUAL
+ # key 218 "KEY_CONNECT"
+ # key 219 "KEY_FINANCE"
+ # key 220 "KEY_SPORT"

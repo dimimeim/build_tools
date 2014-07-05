@@ -15,14 +15,14 @@ diff --git a/services/audioflinger/AudioMixer.cpp frameworks/av/services/audiofl
 index 95f7381..5f80165 100644
 --- AudioMixer_old.cpp	2014-03-11 15:32:12.571292800 +0100
 +++ frameworks/av/services/audioflinger/AudioMixer.cpp	2014-03-11 15:33:47.000000000 +0100
-@@ -1164,6 +1164,7 @@
-                     // t.in == NULL can happen if the track was flushed just after having
-                     // been enabled for mixing.
+@@ -1166,6 +1166,7 @@
                     if (t.in == NULL) {
-+                        memset(t.mainBuffer, 0, sizeof(int16_t) * MAX_NUM_CHANNELS * state->frameCount);
                          enabledTracks &= ~(1<<i);
                          e1 &= ~(1<<i);
++                                               memset(t.mainBuffer, 0, sizeof(int16_t) * MAX_NUM_CHANNELS * state->frameCount);
                          break;
+                     }
+                     size_t inFrames = (t.frameCount > outFrames)?outFrames:t.frameCount;
 -- 
 1.8.3.4 (Apple Git-47)
 
