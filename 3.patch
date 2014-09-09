@@ -50,7 +50,7 @@ index fa4643f..02c45b5 100644
      }
 +// Capri's OMX fail to set a reasonable default size from width and height
 +#ifdef CAPRI_HWC
-+    else {
++    else if (!strncmp(mComponentName, "OMX.BRCM.vc4.decoder.", 21)) {
 +        int32_t width;
 +        int32_t height;
 +        if (meta->findInt32(kKeyWidth, &width) && meta->findInt32(kKeyHeight, &height)) {
@@ -63,33 +63,5 @@ index fa4643f..02c45b5 100644
  
      initOutputFormat(meta);
  
--- 
-1.8.3.4 (Apple Git-47)
-
-
-From 3a374db88238ae39b0a38498f49f8327870edc90 Mon Sep 17 00:00:00 2001
-From: Pawit Pornkitprasan <p.pawit@gmail.com>
-Date: Mon, 23 Dec 2013 18:41:44 +0700
-Subject: [PATCH 3/3] OMXCodec: set default input buffer size only for BCM
- decoder
-
-Change-Id: Ic554343069b47a4b66ea9e8daee684d4923ecd98
----
- media/libstagefright/OMXCodec.cpp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/media/libstagefright/OMXCodec.cpp frameworks/av/media/libstagefright/OMXCodec.cpp
-index 02c45b5..5d48f39 100644
---- a/media/libstagefright/OMXCodec.cpp
-+++ frameworks/av/media/libstagefright/OMXCodec.cpp
-@@ -803,7 +803,7 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
-     }
- // Capri's OMX fail to set a reasonable default size from width and height
- #ifdef CAPRI_HWC
--    else {
-+    else if (!strncmp(mComponentName, "OMX.BRCM.vc4.decoder.", 21)) {
-         int32_t width;
-         int32_t height;
-         if (meta->findInt32(kKeyWidth, &width) && meta->findInt32(kKeyHeight, &height)) {
 -- 
 1.8.3.4 (Apple Git-47)
